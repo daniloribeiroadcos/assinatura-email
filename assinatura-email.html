@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assinatura ADCOS</title>
+  <style>
+    :root {
+      --cor: #1f2933;
+      --acento: #2b5797;
+      --fundo: #f5f6f8;
+      --borda: #d9dee5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--fundo);
+      color: var(--cor);
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 0 0 4px;
+    }
+
+    .sub {
+      color: #5f6b7a;
+      margin: 0 0 24px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 16px;
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin: 0 0 6px;
+    }
+
+    label small {
+      font-weight: 400;
+      color: #8a94a3;
+    }
+
+    select,
+    input[type=text],
+    input[type=email],
+    input[type=tel] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-family: inherit;
+    }
+
+    select {
+      background: #fff;
+      color: inherit;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid var(--acento);
+      outline-offset: -1px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      margin: 4px 0 16px;
+      cursor: pointer;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--acento);
+    }
+
+    .bloco-tel {
+      border-top: 1px solid var(--borda);
+      padding-top: 16px;
+      margin-top: 4px;
+    }
+
+    .oculto {
+      display: none;
+    }
+
+    .erro {
+      color: #b42318;
+      font-size: 13px;
+      margin: -10px 0 14px;
+      display: none;
+    }
+
+    button {
+      background: var(--acento);
+      color: #fff;
+      border: 0;
+      border-radius: 6px;
+      padding: 11px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button.sec {
+      background: #fff;
+      color: var(--acento);
+      border: 1px solid var(--acento);
+    }
+
+    .acoes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    #resultado {
+      display: none;
+    }
+
+    #preview {
+      border: 1px dashed var(--borda);
+      border-radius: 6px;
+      padding: 20px;
+      background: #fff;
+      overflow-x: auto;
+    }
+
+    .aviso {
+      font-size: 13px;
+      color: #5f6b7a;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .ok {
+      color: #067647;
+      font-weight: 600;
+      font-size: 14px;
+      display: none;
+      margin-top: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 160px;
+      margin-top: 12px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+      padding: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Assinatura de E-mail – Grupo ADCOS</h1>
+    <p class="sub">Preencha seus dados e clique em <strong>Criar assinatura</strong>.</p>
+
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label for="nome">Nome</label>
+          <input id="nome" type="text" placeholder="Ex.: Ana Souza">
+          <div class="erro" id="e-nome">Informe o nome.</div>
+        </div>
+        <div>
+          <label for="cargo">Cargo</label>
+          <input id="cargo" type="text" placeholder="Ex.: Analista de Sistemas">
+          <div class="erro" id="e-cargo">Informe o cargo.</div>
+        </div>
+        <div>
+          <label for="depto">Departamento <small>(opcional)</small></label>
+          <input id="depto" type="text" placeholder="Ex.: TI">
+        </div>
+        <div>
+          <label for="email">E-mail</label>
+          <input id="email" type="email" placeholder="ana.souza@adcos.com.br" list="sugestoesEmail" autocomplete="off">
+          <datalist id="sugestoesEmail"></datalist>
+          <div class="erro" id="e-email">Informe um e-mail corporativo válido (ex.: @adcos.com.br, @elbo.com.br).</div>
+        </div>
+        <div>
+          <label for="local">Localidade</label>
+          <select id="local"></select>
+        </div>
+      </div>
+
+      <div class="bloco-tel">
+        <label class="check"><input type="checkbox" id="incluirTel" checked> Incluir telefone na assinatura</label>
+        <div id="camposTel" class="grid">
+          <div>
+            <label for="tel">Telefone</label>
+            <input id="tel" type="tel" placeholder="(11) 99999-9999" maxlength="15">
+            <div class="erro" id="e-tel">Informe um telefone válido.</div>
+          </div>
+          <div id="campoRamal">
+            <label for="ramal">Ramal <small>(opcional)</small></label>
+            <input id="ramal" type="text" placeholder="Ex.: 1234" maxlength="6">
+          </div>
+          <div>
+            <label class="check"><input type="checkbox" id="whats"> Este número é WhatsApp</label>
+          </div>
+        </div>
+      </div>
+
+      <button id="criar">Criar assinatura</button>
+    </div>
+
+    <div class="card" id="resultado">
+      <label>Pré-visualização</label>
+      <div id="preview"></div>
+      <div class="acoes">
+        <button id="copiar">Copiar assinatura</button>
+        <button class="sec" id="verHtml">Ver código HTML</button>
+      </div>
+      <div class="ok" id="ok">Copiado! Agora cole em Outlook › Configurações › Contas › Assinaturas.</div>
+      <textarea id="codigo" readonly></textarea>
+      <p class="aviso">
+        Se o botão de copiar não funcionar, selecione a assinatura acima com o mouse,
+        pressione <strong>Ctrl+C</strong> (ou <strong>Cmd+C</strong> no Mac) e cole no Outlook.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    /* ================== CONFIGURAÇÃO ================== */
+    const IMG = "https://daniloribeiroadcos.github.io/assinatura-email/img/";
+    const CFG = {
+      site: "www.adcos.com.br",
+      siteUrl: "https://www.adcos.com.br",
+      // opções de localidade (a primeira é a padrão)
+      localidades: [
+        "Espírito Santo – Brasil",
+        "São Paulo – Brasil",
+        "Cariacica – ES",
+        "Serra – ES",
+        "Vitória – ES",
+        "São Paulo – SP"
+      ],
+      // domínios aceitos no campo de e-mail (caixas de usuário)
+      dominiosEmail: [
+        "adcos.com.br",
+        "adcosprofissional.com.br",
+        "bioarchaesthetics.com.br",
+        "elbo.com.br",
+        "lojaadcos.com.br",
+        "terceiro.adcos.com.br"
+      ],
+      logoUrl: IMG + "logo-adcos.png",
+      logoLargura: 130,
+      icones: {
+        email: IMG + "e-mail.png",
+        telefone: IMG + "smartphone.png",
+        whatsapp: IMG + "whatsapp.png",
+        local: ""            // sem imagem: usa símbolo de texto
+      },
+      redes: [
+        {nome: "Facebook", url: "https://www.facebook.com/oficial.adcos", icone: IMG + "facebook.png"},
+        {nome: "Instagram", url: "https://www.instagram.com/oficialadcos", icone: IMG + "instagram.png"},
+        {nome: "YouTube", url: "https://www.youtube.com/oficialadcos", icone: IMG + "youtube.png"},
+        {nome: "LinkedIn", url: "https://br.linkedin.com/company/adcosoficial", icone: IMG + "linkedin.png"}
+      ]
+    };
+    /* ================================================== */
+
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+
+    // Preenche a lista de localidades
+    CFG.localidades.forEach(l => {const o = document.createElement("option"); o.value = o.textContent = l; $("local").appendChild(o);});
+
+    // Máscara de telefone
+    $("tel").addEventListener("input", e => {
+      let d = e.target.value.replace(/\D/g, "").slice(0, 11), f = d;
+      if (d.length > 2) f = `(${d.slice(0, 2)}) ${d.slice(2)}`;
+      if (d.length > 6) f = `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
+      e.target.value = f;
+    });
+    // Autopreenchimento do domínio: ao digitar o "@", sugere os domínios aceitos
+    $("email").addEventListener("input", e => {
+      const v = e.target.value.trim().toLowerCase();
+      const lista = $("sugestoesEmail");
+      lista.innerHTML = "";
+      if (!v.includes("@")) return;
+      const [usuario, dom = ""] = v.split("@");
+      if (!usuario) return;
+      CFG.dominiosEmail
+        .filter(d => d.startsWith(dom) && d !== dom)
+        .forEach(d => {const o = document.createElement("option"); o.value = `${usuario}@${d}`; lista.appendChild(o);});
+    });
+    $("ramal").addEventListener("input", e => {e.target.value = e.target.value.replace(/\D/g, "");});
+
+    // Mostrar/ocultar campos de telefone
+    $("incluirTel").addEventListener("change", e => {
+      $("camposTel").classList.toggle("oculto", !e.target.checked);
+      $("e-tel").style.display = "none";
+    });
+
+    /* ---------- Montagem da assinatura ----------
+       Tudo em tabelas, estilos inline e imagens com width/height:
+       é o formato que o Outlook (desktop, web e mobile) respeita melhor. */
+    const FONTE = "font-family:Arial,Helvetica,sans-serif;";
+    const TXT = FONTE + "font-size:13px;color:#333333;line-height:18px;mso-line-height-rule:exactly;";
+
+    function linhaContato(iconeUrl, simbolo, conteudo) {
+      const icone = iconeUrl
+        ? `<img src="${esc(iconeUrl)}" width="14" height="14" alt="" style="display:block;border:0;width:14px;height:14px;">`
+        : `<span style="${TXT}">${simbolo}</span>`;
+      return `<tr>
+        <td width="22" valign="middle" style="width:22px;padding:2px 0;">${icone}</td>
+        <td valign="middle" style="${TXT}padding:2px 0;">${conteudo}</td>
+      </tr>`;
+    }
+
+    function montar(d) {
+      const link = (href, texto) => `<a href="${esc(href)}" style="${TXT}text-decoration:none;color:#333333;">${texto}</a>`;
+
+      let contatos = linhaContato(CFG.icones.email, "&#9993;", link("mailto:" + d.email, esc(d.email)));
+
+      if (d.incluirTel) {
+        const digitos = d.tel.replace(/\D/g, "");
+        let texto = esc(d.tel);
+        if (d.ramal) texto += ` &nbsp;|&nbsp; Ramal ${esc(d.ramal)}`;
+        const href = d.whats ? `https://wa.me/55${digitos}` : `tel:+55${digitos}`;
+        contatos += linhaContato(d.whats ? CFG.icones.whatsapp : CFG.icones.telefone, "&#9742;", link(href, texto));
+      }
+
+      contatos += linhaContato(CFG.icones.local, "&#9906;", esc(d.local));
+
+      const redes = CFG.redes.map(r =>
+        `<td style="padding:0 6px 0 0;"><a href="${esc(r.url)}" target="_blank" style="text-decoration:none;"><img src="${esc(r.icone)}" width="24" height="24" alt="${esc(r.nome)}" style="display:block;border:0;width:24px;height:24px;"></a></td>`
+      ).join("");
+
+      return `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+  <tr>
+    <td width="170" valign="middle" align="center" style="width:170px;padding:0 24px 0 0;">
+      <a href="${esc(CFG.siteUrl)}" style="text-decoration:none;"><img src="${esc(CFG.logoUrl)}" width="${CFG.logoLargura}" alt="Grupo ADCOS" style="display:block;border:0;width:${CFG.logoLargura}px;height:auto;margin:0 auto;"></a>
+      <table cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:collapse;margin-top:12px;">
+        <tr><td align="center" style="${TXT}padding-top:12px;">${link(CFG.siteUrl, esc(CFG.site))}</td></tr>
+      </table>
+    </td>
+    <td valign="top" style="padding:0;">
+      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+        <tr><td style="font-family:'Times New Roman',Times,serif;font-size:19px;font-weight:bold;color:#1f1f1f;line-height:24px;padding:0 0 4px 0;">${esc(d.nome)}</td></tr>
+        <tr><td style="${TXT}font-size:14px;">${esc(d.cargo.toUpperCase())}</td></tr>
+        ${d.depto ? `<tr><td style="${TXT}font-size:14px;">${esc(d.depto)}</td></tr>` : ""}
+        <tr><td style="padding:6px 0 0 0;">
+          <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">${contatos}</table>
+        </td></tr>
+        <tr><td style="padding:10px 0 0 0;">
+          <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>${redes}</tr></table>
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+</table>`;
+    }
+
+    function ler() {
+      return {
+        nome: $("nome").value.trim(),
+        cargo: $("cargo").value.trim(),
+        depto: $("depto").value.trim(),
+        email: $("email").value.trim().toLowerCase(),
+        incluirTel: $("incluirTel").checked,
+        tel: $("tel").value.trim(),
+        ramal: $("ramal").value.trim(),
+        whats: $("whats").checked,
+        local: $("local").value
+      };
+    }
+
+    function validar(d) {
+      const regras = {
+        nome: d.nome.length >= 2,
+        cargo: d.cargo.length >= 2,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email) && CFG.dominiosEmail.includes(d.email.split("@")[1]),
+        tel: !d.incluirTel || d.tel.replace(/\D/g, "").length >= 10
+      };
+      let ok = true;
+      for (const k in regras) {$("e-" + k).style.display = regras[k] ? "none" : "block"; if (!regras[k]) ok = false;}
+      return ok;
+    }
+
+    let htmlAtual = "";
+
+    $("criar").addEventListener("click", () => {
+      const d = ler();
+      if (!validar(d)) return;
+      htmlAtual = montar(d);
+      $("preview").innerHTML = htmlAtual;
+      $("codigo").value = htmlAtual;
+      $("resultado").style.display = "block";
+      $("ok").style.display = "none";
+      $("resultado").scrollIntoView({behavior: "smooth"});
+    });
+
+    $("copiar").addEventListener("click", async () => {
+      let copiou = false;
+      const doc = `<html><body>${htmlAtual}</body></html>`;
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          await navigator.clipboard.write([new ClipboardItem({
+            "text/html": new Blob([doc], {type: "text/html"}),
+            "text/plain": new Blob([$("preview").innerText], {type: "text/plain"})
+          })]);
+          copiou = true;
+        }
+      } catch (e) { }
+      if (!copiou) {
+        try {
+          const r = document.createRange();
+          r.selectNodeContents($("preview"));
+          const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          copiou = document.execCommand("copy");
+        } catch (e) { }
+      }
+      $("ok").style.display = copiou ? "block" : "none";
+      if (!copiou) alert("Não foi possível copiar automaticamente. A assinatura está selecionada: pressione Ctrl+C (Cmd+C no Mac).");
+    });
+
+    $("verHtml").addEventListener("click", () => {
+      const t = $("codigo");
+      t.style.display = t.style.display === "block" ? "none" : "block";
+    });
+  </script>
+</body>
+
+</html>
